@@ -38,3 +38,40 @@ Successful packaging is not a confirmed fix for Huawei's malware warning. That r
 - Pura X Max installation completed on 11 Oct 2026. The installer displayed an unverified-app caution and permitted installation; no malware block appeared in this installation flow. The separate Huawei security scan remains untested.
 - Launched version 7.2.1-hw, allowed notifications, disabled battery optimization, and retried device registration. Google registration succeeded and cloud messaging showed Connected. The push list currently contains MicroG RE itself; third-party notification delivery remains unverified.
 - Evidence: https://debug.thewilners.com/#shot=20261011T172535Z-armstrong-pura-microg-re-install-d41eaecd36-f4072968
+
+## Edge and Pro in-place update, 11 Oct 2026
+
+Both tablets had MicroG RE 6.1.4, with no accounts shown and no registered
+push applications. Installing the private-key build above was rejected because
+the installed signing certificate differed. No app was uninstalled and no data
+was cleared.
+
+The archived `microg-6.1.4_sign.apk` uses the public AOSP test certificate,
+SHA-256 `a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc`.
+Signing the same 7.2.1-hw build with that existing certificate allowed both
+updates in place. This retains their existing test-signing identity; it is not a
+private production signing key. Use this compatibility artifact only for
+installations that already have this certificate. The Pura uses the private
+local key and remains on the original artifact.
+
+- Compatibility artifact: https://remote.thewilners.com/apks/microg-re-7.2.1-huawei-arm64-compat.apk
+- SHA-256: `4836c745fcef3619269536d7332533e11b3da2a69612120413e0a72f0ecea6a3`.
+- All 3,085 APK entries outside META-INF are byte-identical to the original
+  private-key build. APK signature verification and hosted download hash passed.
+- Public certificate and key sources:
+  `https://android.googlesource.com/platform/build/+/refs/heads/main/target/product/security/testkey.x509.pem?format=TEXT`
+  and the matching `testkey.pk8?format=TEXT`. Decode their base64 responses.
+- Re-sign with SDK `apksigner sign --key testkey.pk8 --cert testkey.x509.pem
+  --out microg-re-7.2.1-huawei-arm64-compat.apk ORIGINAL.apk`, then verify with
+  `apksigner verify --print-certs` and compare the certificate above.
+
+Both devices accepted the ordinary installer caution and completed installation.
+A transient network-verification failure cleared on retry. On launch, device
+registration succeeded and Cloud Messaging reported Connected. Battery
+optimization was disabled through the app's standard prompt. Each push list
+contains MicroG RE itself; third-party notification delivery remains unverified.
+Canonical Framework Services was not replaced or modified.
+
+- [Edge connected](https://debug.thewilners.com/#shot=20261011T201853Z-huawei-edge-microg-re-fleet-487fd2f913-5e8350fc)
+- [Pro connected](https://debug.thewilners.com/#shot=20261011T201853Z-huawei-pro-microg-re-fleet-fc7c53d0e6-31306766)
+- [Pura rechecked connected](https://debug.thewilners.com/#shot=20261011T201649Z-pura-x-max-microg-re-fleet-34c5e46c58-178451fd)
