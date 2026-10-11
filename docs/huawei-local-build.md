@@ -34,4 +34,7 @@ Successful packaging is not a confirmed fix for Huawei's malware warning. That r
 - Signed artifact: `build/local-huawei/app.revanced.android.gms-255070218-hw-arm64-local.apk`.
 - SHA-256: `a9b5c1a514cb66a35c4740055ab2ef675feedcd03bdc36df3b069c993996039b`.
 - Signature verification, 16 KB ZIP alignment, ZIP integrity, Huawei version suffix, original package identity, ARM64-only libraries, and absence of RECEIVE_SMS/READ_SMS/SEND_SMS permissions passed.
-- Device installation and Huawei/Droitong scanner acceptance remain unverified. The existing phone installation was preserved.
+- Initially device installation was unverified. The user subsequently authorized removal and reinstallation.
+- Pura X Max installation completed on 11 Oct 2026. The installer displayed an unverified-app caution and permitted installation; no malware block appeared in this installation flow. The separate Huawei security scan remains untested.
+- Launched version 7.2.1-hw, allowed notifications, disabled battery optimization, and retried device registration. Google registration succeeded and cloud messaging showed Connected. The push list currently contains MicroG RE itself; third-party notification delivery remains unverified.
+- Evidence: https://debug.thewilners.com/#shot=20261011T172535Z-armstrong-pura-microg-re-install-d41eaecd36-f4072968
